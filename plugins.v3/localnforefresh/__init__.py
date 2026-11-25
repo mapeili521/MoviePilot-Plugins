@@ -20,8 +20,8 @@ from .core import EXT, atomic, digest, identify, missing, update
 class LocalNfoRefresh(_PluginBase):
     plugin_name = "本地 NFO 标题与简介更新"
     plugin_desc = "预览、修复或覆盖电影和分集标题与简介，定时复查缺失资料。"
-    plugin_icon = "mdi-file-document-edit-outline"
-    plugin_version = "0.1.0"
+    plugin_icon = "https://raw.githubusercontent.com/mapeili521/MoviePilot-Plugins/main/icons/LocalNfoRefresh.png"
+    plugin_version = "0.1.1"
     plugin_author = "mapeili521"
     author_url = "https://github.com/mapeili521"
     plugin_config_prefix = "localnforefresh_"
