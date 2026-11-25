@@ -1,0 +1,15 @@
+{
+  "LocalNfoRefresh": {
+    "name": "本地 NFO 标题与简介更新",
+    "description": "定时修复、覆盖电影和分集 NFO，支持预览与撤销。",
+    "labels": "媒体库,元数据",
+    "version": "0.1.0",
+    "icon": "mdi-file-document-edit-outline",
+    "author": "mapeili521",
+    "level": 1,
+    "system_version": ">=3.2.3,<4",
+    "history": {
+      "v0.1.0": "首次发布。"
+    }
+  }
+}
