@@ -126,6 +126,18 @@ class LocalNfoRefresh(_PluginBase):
                     if not preview and generation == self.generation:
                         data = etree.tostring(root.getroottree(), encoding="UTF-8", xml_declaration=True)
                         self.backed_write(path, old, data, batch)
+                        item_id = str(mappings.get(key, {}).get("emby_id", ""))
+                        if cfg.get("emby_url") and cfg.get("emby_key") and item_id.isdecimal():
+                            try:
+                                response = requests.post(
+                                    cfg["emby_url"].rstrip("/") + "/Items/" + item_id + "/Refresh",
+                                    headers={"X-Emby-Token": cfg["emby_key"]},
+                                    params={"Recursive":"false", "MetadataRefreshMode":"Default",
+                                            "ReplaceAllMetadata":"false", "ReplaceAllImages":"false"},
+                                    timeout=(5, 15), allow_redirects=False)
+                                rows.append(f"Emby 条目 {item_id} 刷新请求 HTTP {response.status_code}")
+                            except requests.RequestException:
+                                rows.append("Emby 刷新请求失败，NFO 已写入")
                     rows.append(key + " " + json.dumps(changes, ensure_ascii=False))
                     changed += 1
                 if unknown:
@@ -226,6 +238,8 @@ class LocalNfoRefresh(_PluginBase):
             ("token","TMDB 凭据（可留空以读取宿主 API Key）","VTextField",{"type":"password"}),
             ("fallback","可选回退语言，如 en-US","VTextField",{}),
             ("mapping","手动映射 JSON，以媒体文件完整路径为键，值含 id、可选 season 和 episode","VTextarea",{}),
+            ("emby_url","可选 Emby API 地址（含 /emby）","VTextField",{}),
+            ("emby_key","可选 Emby API Key，配合映射中的 emby_id","VTextField",{"type":"password"}),
             ("notify","通过 MP 发送运行摘要","VSwitch",{}),
             ("action","保存后执行一次","VSelect",{"items":["","仅预览","立即写入","撤销最近批次"]})]
         nodes = [{"component":comp,"props":dict(props, model=name, label=label)} for name,label,comp,props in fields]
