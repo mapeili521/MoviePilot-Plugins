@@ -40,8 +40,8 @@ class LocalNfoRefresh(_PluginBase):
         action = self.cfg.pop("action", "")
         if action:
             self.update_config(dict(self.cfg, action=""))
-            scheduler.add_plugin_once_job(type(self).__name__, "manual", "NFO 手动任务",
-                                          2, lambda: self.run(action))
+            scheduler.add_plugin_once_job(type(self).__name__, "manual", self.run, "NFO 手动任务",
+                                          delay_seconds=2, func_kwargs={"action": action})
 
     def get_state(self):
         return bool(self.cfg.get("enabled"))
